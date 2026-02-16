@@ -76,8 +76,17 @@
                                             @endif
                                         </td>
                                         <td style="vertical-align: middle" class="text-center">
-                                            <a class="btn btn-dark" href="{{ route('products.edit',$product->id) }}">Edit</a>
-                                            <a class="btn btn-danger" href="#">Delete</a>
+                                            <a class="btn btn-dark"
+                                                href="{{ route('products.edit', $prod->id) }}">Edit</a>
+                                            <form action="{{ route('products.destroy', $prod->id) }}"
+                                                class="d-inline-block" method="POST" enctype="multipart/form-data"
+                                                onsubmit="return confirm('Are you sure want to Delete?')"
+                                                >
+
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                            </form>
                                         </td>
                                     </tr>
                                 @endforeach

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
@@ -83,16 +84,52 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update($id,Request $request)
     {
-        //
+        $product = Product::findOrFail($id);
+        $oldImage=$product->image;
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'sku' => 'required|string|max:255|unique:products,sku,'.$id,
+            'price' => 'required|numeric|min:0',
+            'image' => 'image|mimes:jpg,jpeg,png,webp|max:2048',
+            'status' => 'required|in:Active,Inactive',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect(route('products.edit',$product->id))
+                ->withErrors($validator)
+                ->withInput();
+        }
+        $product->name = $request->name;
+        $product->sku = $request->sku;
+        $product->price = $request->price;
+        $product->status = $request->status;
+        $product->save();
+        if ($request->hasFile('image')) {
+            if($oldImage!==null && File::exists(public_path('uploads/products/'.$oldImage))){
+                File::delete(public_path('uploads/products/'.$oldImage));
+            }
+            $image = $request->file('image');
+            $imageName = time().'.'.$image->getClientOriginalName();
+            $image->move(public_path('uploads/products'), $imageName);
+            $product->image = $imageName;
+            $product->save();
+        }
+
+        return redirect()->route('products.index')->with('success', 'Product updated Successfully');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Product $product)
+    public function destroy($id)
     {
-        //
+       $product = Product::findOrFail($id);
+       if($product->image!==null && File::exists(public_path('uploads/products/'.$product->image))){
+                File::delete(public_path('uploads/products/'.$product->image));
+            }
+        $product->delete(); 
+        return redirect()->route('products.index')->with('success', 'Product deleted Successfully');
     }
 }
