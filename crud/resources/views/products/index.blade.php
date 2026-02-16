@@ -76,7 +76,7 @@
                                             @endif
                                         </td>
                                         <td style="vertical-align: middle" class="text-center">
-                                            <a class="btn btn-dark" href="{{ route('products.edit',) }}">Edit</a>
+                                            <a class="btn btn-dark" href="{{ route('products.edit',$product->id) }}">Edit</a>
                                             <a class="btn btn-danger" href="#">Delete</a>
                                         </td>
                                     </tr>

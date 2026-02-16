@@ -20,7 +20,7 @@
             </div>
             <div class="card p-0 mt-2">
                 <div class="card-header bg-dark text-white">
-                    <h4>Update Product</h4>
+                    <h4>Edit Product</h4>
                 </div>
                 <div class="card-body shadow-lg">
                     <form action="{{ route('products.update', {$product->id}) }}" method="POST" enctype="multipart/form-data">
@@ -31,7 +31,7 @@
                         <div class="mb-3">
                             <label for="name" class="form-label">Name</label>
                             <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                name="name" id="name" value="{{ old('name') }}" placeholder="Name">
+                                name="name" id="name" value="{{ old('name',$product->name) }}" placeholder="Name">
 
                             @error('name')
                                 <div class="invalid-feedback">
@@ -57,7 +57,7 @@
                         <div class="mb-3">
                             <label for="sku" class="form-label">SKU</label>
                             <input type="text" class="form-control @error('sku') is-invalid @enderror" name="sku"
-                                id="sku" value="{{ old('sku') }}" placeholder="SKU">
+                                id="sku" value="{{ old('sku',$product->sku) }}" placeholder="SKU">
 
                             @error('sku')
                                 <div class="invalid-feedback">
@@ -70,7 +70,7 @@
                         <div class="mb-3">
                             <label for="price" class="form-label">Price</label>
                             <input type="text" class="form-control @error('price') is-invalid @enderror"
-                                name="price" id="price" value="{{ old('price') }}" placeholder="Price">
+                                name="price" id="price" value="{{ old('price',$product->price) }}" placeholder="Price">
 
                             @error('price')
                                 <div class="invalid-feedback">
@@ -85,10 +85,10 @@
                             <select name="status" id="status"
                                 class="form-select @error('status') is-invalid @enderror">
 
-                                <option value="Active" {{ old('status') == 'Active' ? 'selected' : '' }}>
+                                <option {{$product->status ==="Active"?"selected":""}} value="Active" {{ old('status') == 'Active' ? 'selected' : '' }}>
                                     Active
                                 </option>
-                                <option value="Inactive" {{ old('status') == 'Inactive' ? 'selected' : '' }}>
+                                <option {{$product->status ==="Inactive"?"selected":""}} value="Inactive" {{ old('status') == 'Inactive' ? 'selected' : '' }}>
                                     Inactive
                                 </option>
                             </select>
