@@ -45,18 +45,18 @@
                         <div class="mb-3">
                             <label for="image" class="form-label">Image</label>
                             <input type="file" class="form-control @error('image') is-invalid @enderror"
-                                name="image" id="image">
+                                name="image" id="image" accept="image/*">
 
                             @error('image')
                                 <div class="invalid-feedback">
                                     {{ $message }}
                                 </div>
                             @enderror
-                        </div>
-                        @if (!empty($product->image))
-                            <img class="rounded mb-2" src="{{ asset('uploads/products/' . $product->image) }}"
+
+                            <img id="imagePreview" class="rounded mt-2 {{ empty($product->image) ? 'd-none' : '' }}"
+                                src="{{ !empty($product->image) ? asset('uploads/products/' . $product->image) : '' }}"
                                 alt="product" width="150">
-                        @endif
+                        </div>
                         {{-- SKU --}}
                         <div class="mb-3">
                             <label for="sku" class="form-label">SKU</label>
@@ -119,6 +119,17 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous">
+    </script>
+    <script>
+        document.getElementById('image').addEventListener('change', function (e) {
+            const preview = document.getElementById('imagePreview');
+            const file = e.target.files[0];
+
+            if (file && file.type.startsWith('image/')) {
+                preview.src = URL.createObjectURL(file);
+                preview.classList.remove('d-none');
+            }
+        });
     </script>
 </body>
 

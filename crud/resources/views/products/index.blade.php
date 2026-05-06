@@ -10,9 +10,7 @@
 </head>
 
 <body>
-    <div class="bg-dark  d-flex justify-content-center text-white py-3">
-        <h1>Laravel Crud 12</h1>
-    </div>
+    <x-header />
     <div class="container mt-2">
         <div class="row">
             <div class="d-flex justify-content-end">
